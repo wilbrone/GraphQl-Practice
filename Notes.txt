@@ -23,4 +23,48 @@ function isCompositeType - Returns if a type can be the parent cantext of a sele
 function isAbstractType - returns if a type is a combination of object types.
 
 function getNullableType - strips any non-null wrappers from a type 
-function getNamedType - strips any non-null or list wrappers from a type
+function getNamedType - strips any non-null or list wrappers from a type 
+
+
+
+***** graphql/utilities modules contains common useful computations to use with the GraphQL language and type objects.
+import { introspectionQuery } from 'graphql'; // ES6
+var { introspectionQuery } = require('graphql'); // CommonJS
+
+var introspectionQuery - query containing enough information to reproduce a system 
+function buildClientSchema - produces a client schema given the result of querying a schema with 'introspectionQuery'
+
+function buildSchema - build a Schema object from GraphQL schema language 
+function printSchema - prints the schemer in a std  format 
+function printIntrospectionSchema - prints introspection features of the schema
+function buildASTSchema - builds a schema from a parsed AST schema 
+function typeFromAST - looks up a type referenced in an AST in the GraphQLSchema 
+function astFromValue - produces a GraphQL Input Value AST given a JavaScript value.
+
+class TypeInfo - tracs type and field definitions during a visitor AST traversal.
+
+function isValidJSValue - determins if a JS value is valid for a GraphQL type. 
+function isValidLiteralValue - Detrermins if a literal value from an AST isvalid fora GraphQL type 
+
+
+***** graphql/validation fulfills the Validation phase of fulfilling a GraphQL result.
+
+## Example
+import { validate } from 'graphql/validation'; // ES6
+var { validate } = require('graphql/validation'); // CommonJS
+
+function validate - Validates an AST against a provided Schema
+var specifiedRules - A list of std validation rules described in the GraphQL specifications
+
+## validate
+function validate(
+  schema: GraphQLSchema,
+  ast: Document,
+  rules?: Array<any>
+): Array<GraphQLError>
+
+
+## specifiedRules
+var specifiedRules: Array<(context: ValidationContext): any>
+
+This set includes all validation rules defined by the GraphQL spec
