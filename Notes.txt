@@ -1,0 +1,26 @@
+***** graphql/type ia a mpodule responsible for defining GraphQL types and schema
+
+## Example
+import { GraphQLSchema } from 'graphql'; // ES6
+var { GraphQLSchema } = require('graphql'); // CommonJS
+
+
+class GraphQLSchema - representation of the capabilities of a GraphQL Server
+
+class GraphQLScalarType - a scalar type
+class GraphQLObjectType - an object type that contains fields
+class GraphQLInterfaceType - interface type that defines fields implementations will contain
+class GraphQLUnionType - union type that defines a list of implementations 
+class GraphQLEnumType - enum type that defines a lis of valid values.
+class GraphQLInputObjectType - input object type that represents structured inputs 
+class GraphQLList - a type wrapper around other types that represents a list of those types
+class GraphQLNonNull - a type wrapper around other types that represents non null version of those types 
+
+function isInputType - Returns if a type can be used as input types for arguments and directives
+function isOutputType - returns if a type can be used as output types as the result of fields
+function isLeafType - Returns if a type ca be a leaf value in a response.
+function isCompositeType - Returns if a type can be the parent cantext of a selection set 
+function isAbstractType - returns if a type is a combination of object types.
+
+function getNullableType - strips any non-null wrappers from a type 
+function getNamedType - strips any non-null or list wrappers from a type

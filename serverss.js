@@ -8,10 +8,12 @@ var fakeDatabase = {
     'a': {
         id: 'a',
         name: 'alice',
+        age: 30,
     },
     'b': {
         id: 'b',
         name: 'bob',
+        age: 30,
     },
 };
 
@@ -21,6 +23,7 @@ var userType = new graphql.GraphQLObjectType({
     fields: {
         id: { type: graphql.GraphQLString },
         name: { type: graphql.GraphQLString },
+        age: { type: graphql.GraphQLInt },
     }
 });
 
