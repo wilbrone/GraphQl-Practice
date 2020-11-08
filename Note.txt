@@ -1,0 +1,211 @@
+***** express-graphql module provides a simple way to create an Express server that runs a GraphQl API.
+
+## Example
+import { graphqlHTTP } from 'express-graphql'; // ES6
+var { graphqlHTTP } = require('express-graphql'); // CommonJS
+
+## GraphQl Schema
+graphqlHTTP({
+  schema: GraphQLSchema,
+  graphiql?: ?boolean,
+  rootValue?: ?any,
+  context?: ?any,
+  pretty?: ?boolean,
+  formatError?: ?Function,
+  validationRules?: ?Array<any>,
+}): Middleware
+
+
+***** graphql module exports a core subset of GraphQL functionality for creation of Graphql type system and servers.
+
+## Example
+import { graphql } from 'graphql'; // ES6
+var { graphql } = require('graphql'); // CommonJS
+
+## Entry Point graphql
+graphql(
+  schema: GraphQLSchema,
+  requestString: string,
+  rootValue?: ?any,
+  contextValue?: ?any,
+  variableValues?: ?{[key: string]: any},
+  operationName?: ?string
+): Promise<GraphQLResult>
+
+fx of graphql;
+*lexes
+*parses
+*validates
+*executes
+
+
+***** graphql/error module is responsible for creating and formatting GraphQL errors
+
+## Example
+import { GraphQLError } from 'graphql'; // ES6
+var { GraphQLError } = require('graphql'); // CommonJS
+
+class GraphQlError - an error that occured within GraphQL
+function syntaxError - Produces a GraphQL Error representing a syntax error. Also gives the position in the source.
+function locatedError - aware of the location responsible for the error
+function formatError - Format an error according to the rules described by the Response Format
+
+## GraphQLError
+class GraphQLError extends Error {
+ constructor(
+   message: string,
+   nodes?: Array<any>,
+   stack?: ?string,
+   source?: Source,
+   positions?: Array<number>,
+   originalError?: ?Error,
+   extensions?: ?{ [key: string]: mixed }
+ )
+}
+
+## syntaxError
+function syntaxError(
+  source: Source,
+  position: number,
+  description: string
+): GraphQLError;
+
+## locatedError
+function locatedError(error: ?Error, nodes: Array<any>): GraphQLError {
+
+## formatError
+function formatError(error: GraphQLError): GraphQLFormattedError
+ 
+type GraphQLFormattedError = {
+  message: string,
+  locations: ?Array<GraphQLErrorLocation>
+};
+ 
+type GraphQLErrorLocation = {
+  line: number,
+  column: number
+};
+
+
+***** graphql/execution is a module responsible for the execution phase of fulfilling a GRaphQl request.
+
+## Example
+import { execute } from 'graphql'; // ES6
+var { execute } = require('graphql'); // CommonJS
+
+function execute - executes a graphql request on the provided schema
+
+## execute
+export function execute(
+  schema: GraphQLSchema,
+  documentAST: Document,
+  rootValue?: mixed,
+  contextValue?: mixed,
+  variableValues?: ?{[key: string]: mixed},
+  operationName?: ?string
+): MaybePromise<ExecutionResult>
+ 
+type MaybePromise<T> = Promise<T> | T;
+ 
+type ExecutionResult = {
+  data: ?Object;
+  errors?: Array<GraphQLError>;
+}
+
+ExecutionResult represents the result of execution. 
+data is the result of executing the query. 
+errors is null if no errors occurred, and is a non-empty array if an error occurred.
+
+
+***** graphql/language is a module responsible for parsing and operating on the GraphQL language
+
+## Example
+import { Source } from 'graphql'; // ES6
+var { Source } = require('graphql'); // CommonJS
+
+class Source - Represents the input string to the GraphQL server
+function getLocation - converts a character offset to a row and a column in the Source
+function lex - Lexes a GraphQL Source according to the GraphQL Grammar
+function parse - Parses a GraphQL Source according to the GraphQL Grammar
+function parseValue - parses a value according to the GraphQL Grammar
+var Kind - repressents the various kinds of parsed AST nodes. An enum that describes the different kinds of AST nodes.
+function visit - a general-purpose visitor to traverse a parsed GraphQL AST
+var BREAK - a token to allow breaking out of the visitor
+function print - Prints an ATS in a std format
+
+## Source
+export class Source {
+  constructor(body: string, name?: string)
+}
+
+## getLocation
+function getLocation(source: Source, position: number): SourceLocation
+ 
+type SourceLocation = {
+  line: number;
+  column: number;
+}
+
+## lex
+function lex(source: Source): Lexer;
+ 
+type Lexer = (resetPosition?: number) => Token;
+ 
+export type Token = {
+  kind: number;
+  start: number;
+  end: number;
+  value: ?string;
+};
+
+## parse
+export function parse(
+  source: Source | string,
+  options?: ParseOptions
+): Document
+
+## parseValue
+export function parseValue(
+  source: Source | string,
+  options?: ParseOptions
+): Value
+
+## visit
+function visit(root, visitor, keyMap)
+
+(Example)
+var editedAST = visit(ast, {
+  enter(node, key, parent, path, ancestors) {
+    // @return
+    //   undefined: no action
+    //   false: skip visiting this node
+    //   visitor.BREAK: stop visiting altogether
+    //   null: delete this node
+    //   any value: replace this node with the returned value
+  },
+  leave(node, key, parent, path, ancestors) {
+    // @return
+    //   undefined: no action
+    //   false: no action
+    //   visitor.BREAK: stop visiting altogether
+    //   null: delete this node
+    //   any value: replace this node with the returned value
+  }
+});
+
+a) Named visitor triggerd by endtering a node of a specific kind.
+    visit(ast, {
+        Kind(node) {
+            // enter the "Kind" node
+        }
+    })
+
+b)Generic visitors that trigger upon entering a leaving any node
+    visit(ast, {
+        enter(node) {
+            // enter any node
+        },
+        leave(node) {
+            // leave any node
+        }
+    })

@@ -31,7 +31,7 @@ var schema = buildSchema(`
 
     type Mutation{
         createMessage(input: MessageInput): Message
-        updateMessage(id: ID!, input: MassageInput): Message
+        updateMessage(id: ID!, input: MessageInput): Message
     }
 `);
 
@@ -92,8 +92,17 @@ var root = {
         // Create a random id for our "database".
         var id = require('crypto').randomBytes(10).toString("hex");
         fakeDatabase[id] = id;
-        return new Message(id, input)
-    }
+        return new Message(id, input);
+    },
+
+    updateMessage: ({ id, input }) => {
+        if (!fakeDatabase[id]) {
+            throw new Error('no message exists with id ' + id);
+        }
+        // This replaces all old data, but some apps might want partial update.
+        fakeDatabase[id] = input;
+        return new Message(id, input);
+    },
 };
 
 var app = express();
