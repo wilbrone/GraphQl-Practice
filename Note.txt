@@ -131,7 +131,7 @@ function parseValue - parses a value according to the GraphQL Grammar
 var Kind - repressents the various kinds of parsed AST nodes. An enum that describes the different kinds of AST nodes.
 function visit - a general-purpose visitor to traverse a parsed GraphQL AST
 var BREAK - a token to allow breaking out of the visitor
-function print - Prints an ATS in a std format
+function print - Prints an ATS in a std format. Converts an AST into a string, using one set of reasonable formatting rules.
 
 ## Source
 export class Source {
@@ -200,7 +200,7 @@ a) Named visitor triggerd by endtering a node of a specific kind.
         }
     })
 
-b)Generic visitors that trigger upon entering a leaving any node
+b) Generic visitors that trigger upon entering a leaving any node
     visit(ast, {
         enter(node) {
             // enter any node
@@ -209,3 +209,33 @@ b)Generic visitors that trigger upon entering a leaving any node
             // leave any node
         }
     })
+
+c) Named visitors that trigger upon entering and leaving a node of a specific kind.
+    visit(ast, {
+        Kind: {
+            enter(node) {
+            // enter the "Kind" node
+            }
+            leave(node) {
+            // leave the "Kind" node
+            }
+        }
+    })
+
+d) Parallel visitors for entering and leaving nodes of a specific kind.
+    visit(ast, {
+        enter: {
+            Kind(node) {
+            // enter the "Kind" node
+            }
+        },
+        leave: {
+            Kind(node) {
+            // leave the "Kind" node
+            }
+        }
+    })
+
+
+## print
+function print(ast): string
